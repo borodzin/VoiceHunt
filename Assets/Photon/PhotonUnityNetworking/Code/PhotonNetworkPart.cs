@@ -960,6 +960,7 @@ namespace Photon.Pun
         {
             PhotonView result = null;
             photonViewList.TryGetValue(viewID, out result);
+            var keys = photonViewList.Keys;
 
             /// Removed aggressive find that likely had no real use case, and was expensive.
             //if (result == null)
