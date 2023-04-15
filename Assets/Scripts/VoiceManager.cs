@@ -20,11 +20,6 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
         foreach (var player in PhotonNetwork.PlayerListOthers)
         {
-            if (player.ActorNumber == 1)
-            {
-                continue;
-            }
-
             var viewId = (int)player.CustomProperties["ViewID"];
             var playerObject = PhotonView.Find(viewId).gameObject;
 
@@ -41,6 +36,10 @@ public class VoiceManager : MonoBehaviourPunCallbacks
                 var volume = Mathf.Lerp(MinVolume, 1f, 1 - (distance / VoiceRange));
                 audioSource.volume = volume;
             }
+
+            var characterUIBehaviour = playerObject.GetComponentInChildren<CharacterUIBehaviour>();
+            var isSpeaking = (bool)player.CustomProperties["IsSpeaking"];
+            characterUIBehaviour.ToggleSpeakingIcon(isSpeaking);
         }
     }
 

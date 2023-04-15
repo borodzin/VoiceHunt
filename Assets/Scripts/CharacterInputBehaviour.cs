@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
-[RequireComponent(typeof(CharacterBehaviour))]
-public class CharacterMovement : MonoBehaviour
+[RequireComponent(typeof(CharacterMovementBehaviour))]
+public class CharacterInputBehaviour : MonoBehaviour
 {
-    private CharacterBehaviour _characterBehavior;
+    private CharacterMovementBehaviour _characterBehavior;
 
     [SerializeField] PhotonView photonView;
 
@@ -16,7 +16,7 @@ public class CharacterMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _characterBehavior = GetComponent<CharacterBehaviour>();
+        _characterBehavior = GetComponent<CharacterMovementBehaviour>();
     }
 
     // Update is called once per frame

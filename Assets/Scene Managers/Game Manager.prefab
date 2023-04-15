@@ -45,3 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerPrefab: {fileID: 4693216061319775944, guid: a7c70082ccb96434c802eac216cc0611, type: 3}
+  Camera: {fileID: 0}
+  VoiceManager: {fileID: 5943463545416428021, guid: 2d8e5c703ec2a8c48b3b4d1db1cc4ee5, type: 3}
+  PlayerSettings: {fileID: 11400000, guid: 34eb9be80883f0f489dd21477e083e8a, type: 2}

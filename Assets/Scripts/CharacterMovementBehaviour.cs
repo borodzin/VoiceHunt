@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class CharacterBehaviour : MonoBehaviour
+public class CharacterMovementBehaviour : MonoBehaviour
 {
     private Animator _animator;
 
