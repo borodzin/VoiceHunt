@@ -15,7 +15,13 @@ public class CharacterChattingBehaviour : MonoBehaviourPunCallbacks
     void Start()
     {
         _recorder = GetComponent<Recorder>();
-       
+
+        var customProperties = new ExitGames.Client.Photon.Hashtable
+            {
+                { "IsSpeaking", false }
+            };
+
+        PhotonNetwork.SetPlayerCustomProperties(customProperties);
     }
 
     // Update is called once per frame

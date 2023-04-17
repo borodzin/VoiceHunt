@@ -7,5 +7,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerSettings", menuName = "Voice Hunt Assets/Player Settings")]
 public class PlayerSettings : ScriptableObject
 {
-    public GameObject Character;
+    [SerializeField]
+    public string Character;
 }

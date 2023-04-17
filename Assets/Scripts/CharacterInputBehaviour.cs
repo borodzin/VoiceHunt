@@ -13,6 +13,8 @@ public class CharacterInputBehaviour : MonoBehaviour
 
     public GameObject Camera { get; set; }
 
+    public bool IsPaused { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +25,16 @@ public class CharacterInputBehaviour : MonoBehaviour
     void Update()
     {
         if (!photonView.IsMine)
+        {
+            return;
+        }
+
+        if (CrossPlatformInputManager.GetButtonDown("Pause"))
+        {
+            IsPaused = true;
+        }
+
+        if (IsPaused)
         {
             return;
         }
@@ -39,6 +51,7 @@ public class CharacterInputBehaviour : MonoBehaviour
 
         // Normalize the directions to get movement direction
         Vector3 motion = (cameraForward.normalized * v + cameraRight.normalized * h).normalized;
-        _characterBehavior.Move(motion);
+        var isSprinting = CrossPlatformInputManager.GetButton("Sprint");
+        _characterBehavior.Move(motion, isSprinting);
     }
 }

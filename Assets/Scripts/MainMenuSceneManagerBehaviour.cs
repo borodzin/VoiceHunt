@@ -6,13 +6,10 @@ using UnityEngine;
 
 public class MainMenuSceneManagerBehaviour : MonoBehaviour
 {
-    private Dictionary<GameObject, GameObject> _gameCharactersAndMenuAvatars;
+    private Dictionary<string, GameObject> _characters;
 
     [SerializeField]
-    public List<GameObject> GameCharacters;
-
-    [SerializeField]
-    public List<GameObject> MenuAvatars;
+    public List<GameObject> Characters;
 
     [SerializeField]
     public SettingsManager SettingsManager;
@@ -26,21 +23,16 @@ public class MainMenuSceneManagerBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (GameCharacters.Count() != MenuAvatars.Count())
+        _characters = new Dictionary<string, GameObject>();
+
+        foreach (var character in Characters)
         {
-            throw new ArgumentException("Counts of game characters and menu avatars should be equal.");
+            _characters.Add(character.name, character);
         }
 
-        _gameCharactersAndMenuAvatars = new Dictionary<GameObject, GameObject>();
+        var playerCharacterName = SettingsManager.PlayerSettings.Character;
 
-        for (var index = 0; index < GameCharacters.Count(); index++)
-        {
-            _gameCharactersAndMenuAvatars.Add(GameCharacters[index], MenuAvatars[index]);
-        }
-
-        var playerCharacter = SettingsManager.PlayerSettings.Character;
-
-        PlayerAvatar = InstatiateMenuAvatar(playerCharacter, SpawnPoint);
+        PlayerAvatar = InstatiateCharacter(playerCharacterName, SpawnPoint);
     }
 
     // Update is called once per frame
@@ -49,9 +41,14 @@ public class MainMenuSceneManagerBehaviour : MonoBehaviour
         
     }
 
-    public GameObject InstatiateMenuAvatar(GameObject gameCharacter, GameObject spawnPoint)
+    public GameObject GetCharacter(string characterName)
     {
-        var avatarToInstatiate = _gameCharactersAndMenuAvatars[gameCharacter];
+        return _characters[characterName];
+    }
+
+    public GameObject InstatiateCharacter(string characterName, GameObject spawnPoint)
+    {
+        var avatarToInstatiate = _characters[characterName];
         var position = spawnPoint.transform.position;
         var rotation = spawnPoint.transform.rotation;
 

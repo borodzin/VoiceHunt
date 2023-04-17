@@ -20,10 +20,13 @@ public class CharacterMovementBehaviour : MonoBehaviour
         
     }
 
-    public void Move(Vector3 motion)
+    public void Move(Vector3 motion, bool isSprinting)
     {
+        var isWalking = motion.magnitude > 0;
         _animator.SetBool("IsWalking", motion.magnitude > 0);
-        transform.Translate(motion.normalized * Time.deltaTime, Space.World);
+        _animator.SetBool("IsSprinting", isSprinting && isWalking);
+        var speed = isSprinting ? 4 : 2;
+        transform.Translate(motion.normalized * Time.deltaTime * speed, Space.World);
 
         if (motion.magnitude > 0)
         {

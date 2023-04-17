@@ -11,11 +11,18 @@ public class CameraController : MonoBehaviour
     public float rotationSpeed = 5.0f;
     public float verticalAngleLimit = 60.0f;
 
+    public CharacterInputBehaviour CharacterInput { get; set; }
+
     private float currentRotationAngle = 0.0f;
     private float currentVerticalAngle = 0.0f;
 
     private void LateUpdate()
     {
+        if (CharacterInput.IsPaused)
+        {
+            return;
+        }
+
         if (target != null)
         {
             currentRotationAngle += CrossPlatformInputManager.GetAxis("Mouse X") * rotationSpeed;

@@ -18,10 +18,12 @@ public class AvatarMenuBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SelectedCharacter = SettingsManager.PlayerSettings.Character;
+        var playerCharacterName = SettingsManager.PlayerSettings.Character;
+
+        SelectedCharacter = MainMenuSceneManagerBehaviour.GetCharacter(playerCharacterName);
         SceneCharacter = MainMenuSceneManagerBehaviour.PlayerAvatar;
 
-        _characters = new LinkedList<GameObject>(MainMenuSceneManagerBehaviour.GameCharacters);
+        _characters = new LinkedList<GameObject>(MainMenuSceneManagerBehaviour.Characters);
         _currentCharacter = _characters.Find(SelectedCharacter);
     }
 
@@ -45,7 +47,7 @@ public class AvatarMenuBehaviour : MonoBehaviour
         }
 
         SelectedCharacter = _currentCharacter.Value;
-        SceneCharacter = MainMenuSceneManagerBehaviour.InstatiateMenuAvatar(SelectedCharacter, SpawnPoint);
+        SceneCharacter = MainMenuSceneManagerBehaviour.InstatiateCharacter(SelectedCharacter.name, SpawnPoint);
     }
 
     public void OnPreviousButtonPressed()
@@ -62,11 +64,11 @@ public class AvatarMenuBehaviour : MonoBehaviour
         }
 
         SelectedCharacter = _currentCharacter.Value;
-        SceneCharacter = MainMenuSceneManagerBehaviour.InstatiateMenuAvatar(SelectedCharacter, SpawnPoint);
+        SceneCharacter = MainMenuSceneManagerBehaviour.InstatiateCharacter(SelectedCharacter.name, SpawnPoint);
     }
 
     public void Save()
     {
-        SettingsManager.SavePlayerCharacter(SelectedCharacter);
+        SettingsManager.SavePlayerCharacter(SelectedCharacter.name);
     }
 }

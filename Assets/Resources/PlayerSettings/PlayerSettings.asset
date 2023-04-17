@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41b7efc95b0243b4f92c84b628ace2b1, type: 3}
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
-  Character: {fileID: 4693216061319775944, guid: a7c70082ccb96434c802eac216cc0611, type: 3}
+  Character: Girl
