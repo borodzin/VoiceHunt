@@ -1,3 +1,4 @@
+using Assets.Scripts.Constants;
 using Photon.Pun;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] PlayerSettings PlayerSettings;
     [SerializeField] GameObject SpawnPoint;
     [SerializeField] PauseMenuBehavior PauseMenu;
+    [SerializeField] TurnskinBehaviour TurnskinBehaviour;
 
     // Start is called before the first frame update
     void Start()
@@ -24,7 +26,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         var photonView = player.GetComponent<PhotonView>();
         var customProperties = new ExitGames.Client.Photon.Hashtable
         {
-            { "ViewID", photonView.ViewID }
+            { NetworkPropertiesKeys.ViewId, photonView.ViewID },
+            { NetworkPropertiesKeys.PlayerNativeShapePrefabName, characterPrefabName },
         };
         PhotonNetwork.SetPlayerCustomProperties(customProperties);
 
@@ -33,6 +36,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         var playerMovement = player.GetComponent<CharacterInputBehaviour>();
         playerMovement.Camera = Camera;
+        playerMovement.PlayerPrefabName = characterPrefabName;
+        playerMovement.TurnskinBehaviour = TurnskinBehaviour;
 
         PauseMenu.CharacterInput = playerMovement;
 

@@ -1,3 +1,4 @@
+using Assets.Scripts.Constants;
 using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,11 @@ public class CharacterInputBehaviour : MonoBehaviour
     [SerializeField] PhotonView photonView;
 
     public GameObject Camera { get; set; }
+
+    public TurnskinBehaviour TurnskinBehaviour { get; set; }
+
+    // to deprecate
+    public string PlayerPrefabName { get; set; }
 
     public bool IsPaused { get; set; }
 
@@ -37,6 +43,31 @@ public class CharacterInputBehaviour : MonoBehaviour
         if (IsPaused)
         {
             return;
+        }
+
+        if (CrossPlatformInputManager.GetButtonDown("Shape"))
+        {
+            var selectedShape = TurnskinBehaviour.SelectedShape;
+
+            if (selectedShape != null)
+            {
+                var customProperties = new ExitGames.Client.Photon.Hashtable
+                {
+                    { NetworkPropertiesKeys.PlayerShapePrefabName, selectedShape.name }
+                };
+
+                PhotonNetwork.SetPlayerCustomProperties(customProperties);
+            }
+        }
+
+        if (CrossPlatformInputManager.GetButtonDown("Unshape"))
+        {
+            var customProperties = new ExitGames.Client.Photon.Hashtable
+            {
+                { NetworkPropertiesKeys.PlayerShapePrefabName, PlayerPrefabName }
+            };
+
+            PhotonNetwork.SetPlayerCustomProperties(customProperties);
         }
 
         float h = CrossPlatformInputManager.GetAxis("Horizontal");
