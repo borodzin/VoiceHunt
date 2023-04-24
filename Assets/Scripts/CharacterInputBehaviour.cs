@@ -70,6 +70,11 @@ public class CharacterInputBehaviour : MonoBehaviour
             PhotonNetwork.SetPlayerCustomProperties(customProperties);
         }
 
+        if (CrossPlatformInputManager.GetButtonDown("Punch"))
+        {
+            _characterBehavior.Punch();
+        }
+
         float h = CrossPlatformInputManager.GetAxis("Horizontal");
         float v = CrossPlatformInputManager.GetAxis("Vertical");
 
