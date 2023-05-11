@@ -15,10 +15,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] PlayerSettings PlayerSettings;
     [SerializeField] GameObject SpawnPoint;
     [SerializeField] PauseMenuBehavior PauseMenu;
-    [SerializeField] TurnskinBehaviour TurnskinBehaviour;
 
     // Start is called before the first frame update
     void Start()
+    {
+    }
+
+    public void StartAsHunter()
     {
         var characterPrefabName = PlayerSettings.Character;
         var spawnPoint = SpawnPoint.transform.position;
@@ -37,7 +40,39 @@ public class GameManager : MonoBehaviourPunCallbacks
         var playerMovement = player.GetComponent<CharacterInputBehaviour>();
         playerMovement.Camera = Camera;
         playerMovement.PlayerPrefabName = characterPrefabName;
-        playerMovement.TurnskinBehaviour = TurnskinBehaviour;
+        playerMovement.IsHunter = true;
+
+        PauseMenu.CharacterInput = playerMovement;
+
+        cameraController.CharacterInput = playerMovement;
+
+        var voiceManagerComponent = VoiceManager.GetComponent<VoiceManager>();
+        voiceManagerComponent.LocalPlayer = player;
+    }
+
+    public void StartAsHider()
+    {
+        var characterPrefabName = PlayerSettings.Character;
+        var spawnPoint = SpawnPoint.transform.position;
+        var player = PhotonNetwork.Instantiate(characterPrefabName, spawnPoint, Quaternion.identity);
+        var photonView = player.GetComponent<PhotonView>();
+        var customProperties = new ExitGames.Client.Photon.Hashtable
+        {
+            { NetworkPropertiesKeys.ViewId, photonView.ViewID },
+            { NetworkPropertiesKeys.PlayerNativeShapePrefabName, characterPrefabName },
+        };
+        PhotonNetwork.SetPlayerCustomProperties(customProperties);
+
+        var turnskinBehaviour = Camera.AddComponent<TurnskinBehaviour>();
+        player.AddComponent<PreyBehaviour>();
+
+        var cameraController = Camera.GetComponent<CameraController>();
+        cameraController.target = player.transform;
+
+        var playerMovement = player.GetComponent<CharacterInputBehaviour>();
+        playerMovement.Camera = Camera;
+        playerMovement.PlayerPrefabName = characterPrefabName;
+        playerMovement.TurnskinBehaviour = turnskinBehaviour;
 
         PauseMenu.CharacterInput = playerMovement;
 

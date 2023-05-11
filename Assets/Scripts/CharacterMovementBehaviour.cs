@@ -41,6 +41,11 @@ public class CharacterMovementBehaviour : MonoBehaviour
         _animator.SetBool("IsPunching", true);
     }
 
+    public void Knock()
+    {
+        _animator.SetBool("IsKnocking", true);
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         HandleFistCollision(collision);

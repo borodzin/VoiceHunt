@@ -34,14 +34,14 @@ public class TurnskinBehaviour : MonoBehaviour
             hittedObjectOutlineComponent.enabled = true;
 
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-            Debug.Log($"Did Hit the {hit.transform.gameObject.name}");
+            //Debug.Log($"Did Hit the {hit.transform.gameObject.name}");
         }
         else
         {
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.white);
             DisableSelectedShapeOutlining();
             SelectedShape = null;
-            Debug.Log($"Did Hit nothing");
+            //Debug.Log($"Did Hit nothing");
         }
     }
 

@@ -47,3 +47,5 @@ MonoBehaviour:
   Camera: {fileID: 2209196881040148229, guid: 39652cc823d6dc64e8fc696f84fd0a59, type: 3}
   VoiceManager: {fileID: 5943463545416428021, guid: 2d8e5c703ec2a8c48b3b4d1db1cc4ee5, type: 3}
   PlayerSettings: {fileID: 11400000, guid: 34eb9be80883f0f489dd21477e083e8a, type: 2}
+  SpawnPoint: {fileID: 0}
+  PauseMenu: {fileID: 0}

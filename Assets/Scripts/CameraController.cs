@@ -18,6 +18,11 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (CharacterInput == null)
+        {
+            return;
+        }
+
         if (CharacterInput.IsPaused)
         {
             return;

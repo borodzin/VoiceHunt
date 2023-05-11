@@ -7,9 +7,4 @@ public class FistBehaviour : MonoBehaviour
 {
     [SerializeField]
     public SphereCollider FistCollider;
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        
-    }
 }

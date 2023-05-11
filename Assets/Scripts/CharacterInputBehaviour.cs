@@ -9,6 +9,7 @@ using UnityStandardAssets.CrossPlatformInput;
 public class CharacterInputBehaviour : MonoBehaviour
 {
     private CharacterMovementBehaviour _characterBehavior;
+    private ParticleSystem _shapingSmokes;
 
     [SerializeField] PhotonView photonView;
 
@@ -21,10 +22,13 @@ public class CharacterInputBehaviour : MonoBehaviour
 
     public bool IsPaused { get; set; }
 
+    public bool IsHunter { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {
         _characterBehavior = GetComponent<CharacterMovementBehaviour>();
+        _shapingSmokes = GetComponentInChildren<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -45,7 +49,7 @@ public class CharacterInputBehaviour : MonoBehaviour
             return;
         }
 
-        if (CrossPlatformInputManager.GetButtonDown("Shape"))
+        if (CrossPlatformInputManager.GetButtonDown("Shape") && !IsHunter)
         {
             var selectedShape = TurnskinBehaviour.SelectedShape;
 
@@ -57,10 +61,11 @@ public class CharacterInputBehaviour : MonoBehaviour
                 };
 
                 PhotonNetwork.SetPlayerCustomProperties(customProperties);
+                _shapingSmokes.Play();
             }
         }
 
-        if (CrossPlatformInputManager.GetButtonDown("Unshape"))
+        if (CrossPlatformInputManager.GetButtonDown("Unshape") && !IsHunter)
         {
             var customProperties = new ExitGames.Client.Photon.Hashtable
             {
@@ -70,7 +75,7 @@ public class CharacterInputBehaviour : MonoBehaviour
             PhotonNetwork.SetPlayerCustomProperties(customProperties);
         }
 
-        if (CrossPlatformInputManager.GetButtonDown("Punch"))
+        if (CrossPlatformInputManager.GetButtonDown("Punch") && IsHunter)
         {
             _characterBehavior.Punch();
         }

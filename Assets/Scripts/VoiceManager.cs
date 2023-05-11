@@ -25,7 +25,7 @@ public class VoiceManager : MonoBehaviourPunCallbacks
 
             var distance = GetDistanceBetweenPlayers(LocalPlayer, playerObject);
             var audioSource = playerObject.GetComponentInChildren<AudioSource>();
-            Debug.Log(distance);
+            //Debug.Log(distance);
 
             if (distance > VoiceRange)
             {
