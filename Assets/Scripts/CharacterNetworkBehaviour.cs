@@ -19,6 +19,8 @@ public class CharacterNetworkBehaviour : MonoBehaviourPunCallbacks
         var playerObject = PhotonView.Find(viewId).gameObject;
 
         HandleChangingShape(targetPlayer, playerObject, changedProps);
+        HandlePunch(targetPlayer, playerObject, changedProps);
+        HandleKnock(targetPlayer, playerObject, changedProps);
     }
 
     private void HandleChangingShape(Player targetPlayer, GameObject targetPlayerObject, ExitGames.Client.Photon.Hashtable changedProps)
@@ -48,9 +50,68 @@ public class CharacterNetworkBehaviour : MonoBehaviourPunCallbacks
         var currentShape = Instantiate(shape, targetPlayerObject.transform);
         currentShape.name = "Current Shape";
 
+        var shapingSmokes = targetPlayerObject.transform.Find("ShapingSmokes").gameObject.GetComponent<ParticleSystem>();
+        shapingSmokes.Play();
+
         if (playerNativeShape.activeSelf)
         {
             playerNativeShape.SetActive(false);
         }
+    }
+
+    private void HandlePunch(Player targetPlayer, GameObject targetPlayerObject, ExitGames.Client.Photon.Hashtable changedProps)
+    {
+        if (!targetPlayer.CustomProperties.ContainsKey(NetworkPropertiesKeys.IsKicking))
+        {
+            return;
+        }
+
+        var isKicking = (bool)targetPlayer.CustomProperties[NetworkPropertiesKeys.IsKicking];
+
+        if (!isKicking)
+        {
+            return;
+        }
+
+        var punchEffectObject = targetPlayerObject.GetComponentInChildren<Mark>();
+        var punchEffect = punchEffectObject.gameObject.GetComponent<ParticleSystem>();
+
+        punchEffect.Play();
+
+        var customProperties = new ExitGames.Client.Photon.Hashtable
+        {
+            { NetworkPropertiesKeys.IsKicking, false }
+        };
+
+        targetPlayer.SetCustomProperties(customProperties);
+    }
+
+    private void HandleKnock(Player targetPlayer, GameObject targetPlayerObject, ExitGames.Client.Photon.Hashtable changedProps)
+    {
+        if (!targetPlayer.CustomProperties.ContainsKey(NetworkPropertiesKeys.IsKnocked))
+        {
+            return;
+        }
+
+        var isKnocked = (bool)targetPlayer.CustomProperties[NetworkPropertiesKeys.IsKnocked];
+
+        if (!isKnocked)
+        {
+            return;
+        }
+
+        var knockEffect = targetPlayerObject.transform.Find("KnockSmokes").gameObject.GetComponent<ParticleSystem>();
+        knockEffect.Play();
+
+        var customProperties = new ExitGames.Client.Photon.Hashtable
+        {
+            { NetworkPropertiesKeys.IsKnocked, false }
+        };
+
+        targetPlayer.SetCustomProperties(customProperties);
+    }
+
+    private void HandlePreyDie(Player targetPlayer, GameObject targetPlayerObject, ExitGames.Client.Photon.Hashtable changedProps)
+    {
     }
 }

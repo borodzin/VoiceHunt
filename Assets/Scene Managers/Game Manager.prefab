@@ -49,3 +49,5 @@ MonoBehaviour:
   PlayerSettings: {fileID: 11400000, guid: 34eb9be80883f0f489dd21477e083e8a, type: 2}
   SpawnPoint: {fileID: 0}
   PauseMenu: {fileID: 0}
+  GameUI: {fileID: 0}
+  GhostPrefab: {fileID: 5915419072947152873, guid: 6fc5035476cce3345a0f7232ff320c6e, type: 3}

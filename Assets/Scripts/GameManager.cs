@@ -10,11 +10,15 @@ using UnityStandardAssets.CrossPlatformInput;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+    private GameObject _player;
+
     [SerializeField] GameObject Camera;
     [SerializeField] GameObject VoiceManager;
     [SerializeField] PlayerSettings PlayerSettings;
     [SerializeField] GameObject SpawnPoint;
     [SerializeField] PauseMenuBehavior PauseMenu;
+    [SerializeField] GameObject GameUI;
+    [SerializeField] GameObject GhostPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -64,7 +68,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         PhotonNetwork.SetPlayerCustomProperties(customProperties);
 
         var turnskinBehaviour = Camera.AddComponent<TurnskinBehaviour>();
-        player.AddComponent<PreyBehaviour>();
+        var preyBehaviour = player.AddComponent<PreyBehaviour>();
+        preyBehaviour.GhostPrefab = GhostPrefab;
 
         var cameraController = Camera.GetComponent<CameraController>();
         cameraController.target = player.transform;
@@ -80,5 +85,20 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         var voiceManagerComponent = VoiceManager.GetComponent<VoiceManager>();
         voiceManagerComponent.LocalPlayer = player;
+
+        var preyUiBehaviuor = GameUI.GetComponent<PreyUiBehaviour>();
+        preyUiBehaviuor.CreateHearts(3);
+        preyBehaviour.PreyUiBehaviour = preyUiBehaviuor;
+        preyUiBehaviuor.HeartsAreEnded += preyBehaviour.Die;
+        preyUiBehaviuor.HeartsAreEnded += PreyHasBeenDied;
+
+        _player = player;
+    }
+
+    private void PreyHasBeenDied()
+    {
+        Destroy(_player.GetComponent<PreyBehaviour>());
+        Destroy(Camera.GetComponent<TurnskinBehaviour>());
+        _player.GetComponent<CharacterInputBehaviour>().IsDied = true;
     }
 }

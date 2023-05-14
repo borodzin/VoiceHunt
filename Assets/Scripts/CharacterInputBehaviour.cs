@@ -24,11 +24,12 @@ public class CharacterInputBehaviour : MonoBehaviour
 
     public bool IsHunter { get; set; }
 
+    public bool IsDied { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {
         _characterBehavior = GetComponent<CharacterMovementBehaviour>();
-        _shapingSmokes = GetComponentInChildren<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -49,7 +50,7 @@ public class CharacterInputBehaviour : MonoBehaviour
             return;
         }
 
-        if (CrossPlatformInputManager.GetButtonDown("Shape") && !IsHunter)
+        if (CrossPlatformInputManager.GetButtonDown("Shape") && !IsHunter && !IsDied)
         {
             var selectedShape = TurnskinBehaviour.SelectedShape;
 
@@ -61,11 +62,10 @@ public class CharacterInputBehaviour : MonoBehaviour
                 };
 
                 PhotonNetwork.SetPlayerCustomProperties(customProperties);
-                _shapingSmokes.Play();
             }
         }
 
-        if (CrossPlatformInputManager.GetButtonDown("Unshape") && !IsHunter)
+        if (CrossPlatformInputManager.GetButtonDown("Unshape") && !IsHunter && !IsDied)
         {
             var customProperties = new ExitGames.Client.Photon.Hashtable
             {
