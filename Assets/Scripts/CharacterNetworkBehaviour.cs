@@ -1,6 +1,7 @@
 using Assets.Scripts.Constants;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -10,6 +11,8 @@ public class CharacterNetworkBehaviour : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     ShapeContainer ShapeContainer;
+
+    public event Action ShapeChanged;
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
@@ -57,6 +60,8 @@ public class CharacterNetworkBehaviour : MonoBehaviourPunCallbacks
         {
             playerNativeShape.SetActive(false);
         }
+
+        ShapeChanged?.Invoke();
     }
 
     private void HandlePunch(Player targetPlayer, GameObject targetPlayerObject, ExitGames.Client.Photon.Hashtable changedProps)

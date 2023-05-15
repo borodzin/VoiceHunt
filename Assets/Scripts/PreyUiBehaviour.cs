@@ -6,10 +6,6 @@ using UnityEngine.UI;
 
 public class PreyUiBehaviour : MonoBehaviour
 {
-    private static readonly float _startHeartPosX = 740;
-    private static readonly float _startHeartPosY = 400;
-    private static readonly float _posXOffset = 160;
-
     private List<GameObject> _hearts;
     private Canvas _thisCanvas;
 
@@ -24,12 +20,12 @@ public class PreyUiBehaviour : MonoBehaviour
         _hearts = new List<GameObject>();
     }
 
-    public void CreateHearts(int count)
+    public void CreateHearts(int count, float startHeartPosX, float startHeartPosY, float posXOffset)
     {
-        for (int index = 0, posX = (int)_startHeartPosX; index < count; index++, posX -= (int)_posXOffset)
+        for (int index = 0, posX = (int)startHeartPosX; index < count; index++, posX -= (int)posXOffset)
         {
             var heartObject = Instantiate(Heart, _thisCanvas.transform);
-            heartObject.transform.localPosition = new Vector3(posX, _startHeartPosY, 0);
+            heartObject.transform.localPosition = new Vector3(posX, startHeartPosY, 0);
 
             _hearts.Add(heartObject);
         }

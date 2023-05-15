@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     private GameObject _player;
 
+    [SerializeField] CharacterNetworkBehaviour CharacterNetworkBehaviour;
     [SerializeField] GameObject Camera;
     [SerializeField] GameObject VoiceManager;
     [SerializeField] PlayerSettings PlayerSettings;
@@ -19,6 +20,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] PauseMenuBehavior PauseMenu;
     [SerializeField] GameObject GameUI;
     [SerializeField] GameObject GhostPrefab;
+
+    [SerializeField] GameObject TimerPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -43,7 +46,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         var playerMovement = player.GetComponent<CharacterInputBehaviour>();
         playerMovement.Camera = Camera;
-        playerMovement.PlayerPrefabName = characterPrefabName;
         playerMovement.IsHunter = true;
 
         PauseMenu.CharacterInput = playerMovement;
@@ -76,8 +78,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         var playerMovement = player.GetComponent<CharacterInputBehaviour>();
         playerMovement.Camera = Camera;
-        playerMovement.PlayerPrefabName = characterPrefabName;
-        playerMovement.TurnskinBehaviour = turnskinBehaviour;
 
         PauseMenu.CharacterInput = playerMovement;
 
@@ -87,12 +87,24 @@ public class GameManager : MonoBehaviourPunCallbacks
         voiceManagerComponent.LocalPlayer = player;
 
         var preyUiBehaviuor = GameUI.GetComponent<PreyUiBehaviour>();
-        preyUiBehaviuor.CreateHearts(3);
+        preyUiBehaviuor.CreateHearts(3, 740, 400, 160);
         preyBehaviour.PreyUiBehaviour = preyUiBehaviuor;
+        preyBehaviour.TurnskinBehaviour = turnskinBehaviour;
+        preyBehaviour.PlayerNativePrefabName = characterPrefabName;
+        playerMovement.ChangeShape += preyBehaviour.ChangeShape;
+        playerMovement.ReturnShape += preyBehaviour.ReturnShape;
         preyUiBehaviuor.HeartsAreEnded += preyBehaviour.Die;
         preyUiBehaviuor.HeartsAreEnded += PreyHasBeenDied;
 
         _player = player;
+
+        var timer = Instantiate(TimerPrefab, GameUI.GetComponent<Canvas>().transform);
+        timer.transform.localPosition = new Vector3(720, 0, 0);
+        var timerBehaviour = timer.GetComponent<TimerBehaviour>();
+
+        CharacterNetworkBehaviour.ShapeChanged += timerBehaviour.StartTimer;
+        playerMovement.ReturnShape += timerBehaviour.EndTimer;
+        timerBehaviour.TimerTick += preyBehaviour.ReturnShape;
     }
 
     private void PreyHasBeenDied()

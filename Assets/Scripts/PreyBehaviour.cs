@@ -15,6 +15,10 @@ public class PreyBehaviour : MonoBehaviour
     
     public PreyUiBehaviour PreyUiBehaviour { get; set; }
 
+    public TurnskinBehaviour TurnskinBehaviour { get; set; }
+
+    public string PlayerNativePrefabName { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +31,31 @@ public class PreyBehaviour : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void ChangeShape()
+    {
+        var selectedShape = TurnskinBehaviour.SelectedShape;
+
+        if (selectedShape != null)
+        {
+            var customProperties = new ExitGames.Client.Photon.Hashtable
+                {
+                    { NetworkPropertiesKeys.PlayerShapePrefabName, selectedShape.name }
+                };
+
+            PhotonNetwork.SetPlayerCustomProperties(customProperties);
+        }
+    }
+
+    public void ReturnShape()
+    {
+        var customProperties = new ExitGames.Client.Photon.Hashtable
+        {
+            { NetworkPropertiesKeys.PlayerShapePrefabName, PlayerNativePrefabName }
+        };
+
+        PhotonNetwork.SetPlayerCustomProperties(customProperties);
     }
 
     public void Die()
@@ -61,7 +90,7 @@ public class PreyBehaviour : MonoBehaviour
 
             var customProperties = new ExitGames.Client.Photon.Hashtable
             {
-                { NetworkPropertiesKeys.PlayerShapePrefabName, _characterInputBehaviour.PlayerPrefabName },
+                { NetworkPropertiesKeys.PlayerShapePrefabName, PlayerNativePrefabName },
                 { NetworkPropertiesKeys.IsKnocked, true }
             };
 

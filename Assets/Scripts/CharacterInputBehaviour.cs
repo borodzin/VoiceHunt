@@ -1,5 +1,6 @@
 using Assets.Scripts.Constants;
 using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,16 +16,15 @@ public class CharacterInputBehaviour : MonoBehaviour
 
     public GameObject Camera { get; set; }
 
-    public TurnskinBehaviour TurnskinBehaviour { get; set; }
-
-    // to deprecate
-    public string PlayerPrefabName { get; set; }
-
     public bool IsPaused { get; set; }
 
     public bool IsHunter { get; set; }
 
     public bool IsDied { get; set; }
+
+    public event Action ChangeShape;
+
+    public event Action ReturnShape;
 
     // Start is called before the first frame update
     void Start()
@@ -52,27 +52,12 @@ public class CharacterInputBehaviour : MonoBehaviour
 
         if (CrossPlatformInputManager.GetButtonDown("Shape") && !IsHunter && !IsDied)
         {
-            var selectedShape = TurnskinBehaviour.SelectedShape;
-
-            if (selectedShape != null)
-            {
-                var customProperties = new ExitGames.Client.Photon.Hashtable
-                {
-                    { NetworkPropertiesKeys.PlayerShapePrefabName, selectedShape.name }
-                };
-
-                PhotonNetwork.SetPlayerCustomProperties(customProperties);
-            }
+            ChangeShape?.Invoke();
         }
 
         if (CrossPlatformInputManager.GetButtonDown("Unshape") && !IsHunter && !IsDied)
         {
-            var customProperties = new ExitGames.Client.Photon.Hashtable
-            {
-                { NetworkPropertiesKeys.PlayerShapePrefabName, PlayerPrefabName }
-            };
-
-            PhotonNetwork.SetPlayerCustomProperties(customProperties);
+            ReturnShape?.Invoke();
         }
 
         if (CrossPlatformInputManager.GetButtonDown("Punch") && IsHunter)
