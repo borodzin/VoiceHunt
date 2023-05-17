@@ -11,6 +11,7 @@ public class TimerBehaviour : MonoBehaviour
     private Stopwatch _timer;
     private TextMeshProUGUI _timerText;
     private bool _isDescending;
+    private int _currentSeconds;
 
     [SerializeField]
     int IntervalSeconds = 10;
@@ -33,12 +34,20 @@ public class TimerBehaviour : MonoBehaviour
 
         _timer = new Stopwatch();
         _isDescending = true;
+
+        _currentSeconds = IntervalSeconds;
     }
 
     // Update is called once per frame
     void Update()
     {
         UpdateTimer();
+    }
+
+    public void RestartTimer()
+    {
+        _currentSeconds = IntervalSeconds;
+        _timer.Restart();
     }
 
     public void StartTimer()
@@ -64,7 +73,9 @@ public class TimerBehaviour : MonoBehaviour
 
     public void ChangeTimerDirection(bool isDescending)
     {
+        _currentSeconds = GetCurrentSeconds();
         _isDescending = isDescending;
+        _timer.Restart();
     }
 
     private void UpdateTimer()
@@ -74,9 +85,7 @@ public class TimerBehaviour : MonoBehaviour
             return;
         }
 
-        var timerTextValue = _isDescending
-            ? IntervalSeconds - _timer.Elapsed.Seconds
-            : IntervalSeconds + _timer.Elapsed.Seconds;
+        var timerTextValue = GetCurrentSeconds();
 
         _timerText.text = timerTextValue.ToString();
 
@@ -84,5 +93,19 @@ public class TimerBehaviour : MonoBehaviour
         {
             EndTimer();
         }
+    }
+
+    private int GetCurrentSeconds()
+    {
+        var result = _isDescending
+            ? _currentSeconds - _timer.Elapsed.Seconds
+            : _currentSeconds + _timer.Elapsed.Seconds;
+
+        if (result > 10)
+        {
+            result = 10;
+        }
+
+        return result;
     }
 }

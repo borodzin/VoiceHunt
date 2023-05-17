@@ -1,6 +1,7 @@
 using Photon.Pun;
 using Photon.Realtime;
 using Photon.Voice.Unity;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,15 +13,19 @@ public class CharacterChattingBehaviour : MonoBehaviourPunCallbacks
 {
     private Recorder _recorder;
 
+    public event Action Speak;
+
+    public event Action Quite;
+
     // Start is called before the first frame update
     void Start()
     {
         _recorder = GetComponent<Recorder>();
 
         var customProperties = new ExitGames.Client.Photon.Hashtable
-            {
-                { "IsSpeaking", false }
-            };
+        {
+            { "IsSpeaking", false }
+        };
 
         PhotonNetwork.SetPlayerCustomProperties(customProperties);
     }
@@ -40,6 +45,8 @@ public class CharacterChattingBehaviour : MonoBehaviourPunCallbacks
             PhotonNetwork.SetPlayerCustomProperties(customProperties);
 
             _recorder.TransmitEnabled = true;
+
+            Speak?.Invoke();
         }
 
         if (CrossPlatformInputManager.GetButtonUp("Speak"))
@@ -53,6 +60,8 @@ public class CharacterChattingBehaviour : MonoBehaviourPunCallbacks
             PhotonNetwork.SetPlayerCustomProperties(customProperties);
 
             _recorder.TransmitEnabled = false;
+
+           Quite?.Invoke();
         }
     }
 }

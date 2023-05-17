@@ -9,10 +9,17 @@ using UnityEngine;
 
 public class CharacterNetworkBehaviour : MonoBehaviourPunCallbacks
 {
+    private Dictionary<int, string> _playersCurrentShapes;
+
     [SerializeField]
     ShapeContainer ShapeContainer;
 
     public event Action ShapeChanged;
+
+    void Start()
+    {
+        _playersCurrentShapes = new Dictionary<int, string>();
+    }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
@@ -37,6 +44,17 @@ public class CharacterNetworkBehaviour : MonoBehaviourPunCallbacks
         var playerNativeShape = targetPlayerObject.transform.Find(playerPrefabName).gameObject;
         var playerCurrentShape = targetPlayerObject.transform.Find("Current Shape")?.gameObject;
         var targetShapePrefabName = (string)targetPlayer.CustomProperties[NetworkPropertiesKeys.PlayerShapePrefabName];
+        var playerViewId = targetPlayerObject.GetPhotonView().ViewID;
+
+        if (!_playersCurrentShapes.ContainsKey(playerViewId))
+        {
+            _playersCurrentShapes.Add(playerViewId, string.Empty);
+        }
+
+        if (_playersCurrentShapes[playerViewId] == targetShapePrefabName)
+        {
+            return;
+        }
 
         if (playerCurrentShape != null)
         {
@@ -46,6 +64,7 @@ public class CharacterNetworkBehaviour : MonoBehaviourPunCallbacks
         if (targetShapePrefabName == playerNativeShape.name)
         {
             playerNativeShape.SetActive(true);
+            _playersCurrentShapes[playerViewId] = playerNativeShape.name;
             return;
         }
 
@@ -61,6 +80,7 @@ public class CharacterNetworkBehaviour : MonoBehaviourPunCallbacks
             playerNativeShape.SetActive(false);
         }
 
+        _playersCurrentShapes[playerViewId] = targetShapePrefabName;
         ShapeChanged?.Invoke();
     }
 

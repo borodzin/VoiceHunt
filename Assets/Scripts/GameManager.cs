@@ -103,8 +103,13 @@ public class GameManager : MonoBehaviourPunCallbacks
         var timerBehaviour = timer.GetComponent<TimerBehaviour>();
 
         CharacterNetworkBehaviour.ShapeChanged += timerBehaviour.StartTimer;
+        CharacterNetworkBehaviour.ShapeChanged += timerBehaviour.RestartTimer;
         playerMovement.ReturnShape += timerBehaviour.EndTimer;
         timerBehaviour.TimerTick += preyBehaviour.ReturnShape;
+
+        var playerChattingBehaviour = player.GetComponent<CharacterChattingBehaviour>();
+        playerChattingBehaviour.Speak += () => timerBehaviour.ChangeTimerDirection(false);
+        playerChattingBehaviour.Quite += () => timerBehaviour.ChangeTimerDirection(true);
     }
 
     private void PreyHasBeenDied()
