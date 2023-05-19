@@ -37,9 +37,9 @@ public class VoiceManager : MonoBehaviourPunCallbacks
                 audioSource.volume = volume;
             }
 
-            var characterUIBehaviour = playerObject.GetComponentInChildren<CharacterUIBehaviour>();
-            var isSpeaking = (bool)player.CustomProperties["IsSpeaking"];
-            characterUIBehaviour.ToggleSpeakingIcon(isSpeaking);
+            //var characterUIBehaviour = playerObject.GetComponentInChildren<CharacterUIBehaviour>();
+            //var isSpeaking = (bool)player.CustomProperties["IsSpeaking"];
+            //characterUIBehaviour.ToggleSpeakingIcon(isSpeaking);
         }
     }
 

@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] PauseMenuBehavior PauseMenu;
     [SerializeField] GameObject GameUI;
     [SerializeField] GameObject GhostPrefab;
+    [SerializeField] GameUiManager GameUiManager;
 
     [SerializeField] GameObject TimerPrefab;
 
@@ -54,6 +55,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         var voiceManagerComponent = VoiceManager.GetComponent<VoiceManager>();
         voiceManagerComponent.LocalPlayer = player;
+
+        GameUiManager.EnableGameUi();
+        GameUiManager.EnableHunterUi();
     }
 
     public void StartAsHider()
@@ -110,6 +114,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         var playerChattingBehaviour = player.GetComponent<CharacterChattingBehaviour>();
         playerChattingBehaviour.Speak += () => timerBehaviour.ChangeTimerDirection(false);
         playerChattingBehaviour.Quite += () => timerBehaviour.ChangeTimerDirection(true);
+        preyUiBehaviuor.HeartsAreEnded += timerBehaviour.EndTimer;
+
+        GameUiManager.EnableGameUi();
+        GameUiManager.EnablePreyUi();
     }
 
     private void PreyHasBeenDied()

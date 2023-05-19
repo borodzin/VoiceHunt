@@ -50,6 +50,11 @@ public class PreyBehaviour : MonoBehaviour
 
     public void ReturnShape()
     {
+        if (_characterInputBehaviour.IsDied)
+        {
+            return;
+        }
+
         var customProperties = new ExitGames.Client.Photon.Hashtable
         {
             { NetworkPropertiesKeys.PlayerShapePrefabName, PlayerNativePrefabName }

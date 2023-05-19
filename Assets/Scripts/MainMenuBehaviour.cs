@@ -106,6 +106,7 @@ public class MainMenuBehaviour : MonoBehaviourPunCallbacks
         var roomOptions = new RoomOptions
         {
             IsOpen = true,
+            
             CustomRoomProperties = new ExitGames.Client.Photon.Hashtable
             {
                 { "SceneName", mapName },

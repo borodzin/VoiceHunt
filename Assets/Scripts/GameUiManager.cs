@@ -8,18 +8,14 @@ public class GameUiManager : MonoBehaviour
     [SerializeField] GameObject PauseMenu;
     [SerializeField] GameObject PhoneMenu;
 
+    [SerializeField] GameObject ShapeButton;
+    [SerializeField] GameObject UnshapeButton;
+
+    [SerializeField] GameObject PunchButton;
+
     // Start is called before the first frame update
     void Start()
     {
-        if (IsPhonePlatfrom())
-        {
-            PhoneMenu.SetActive(true);
-        }
-        else
-        {
-            PhoneMenu.SetActive(false);
-        }
-
         PauseMenu.SetActive(false);
     }
 
@@ -31,6 +27,29 @@ public class GameUiManager : MonoBehaviour
             PauseMenu.SetActive(true);
             PhoneMenu.SetActive(false);
         }
+    }
+
+    public void EnableGameUi()
+    {
+        if (IsPhonePlatfrom())
+        {
+            PhoneMenu.SetActive(true);
+        }
+        else
+        {
+            PhoneMenu.SetActive(false);
+        }
+    }
+
+    public void EnablePreyUi()
+    {
+        ShapeButton.SetActive(true);
+        UnshapeButton.SetActive(true);
+    }
+
+    public void EnableHunterUi()
+    {
+        PunchButton.SetActive(true);
     }
 
     private bool IsPhonePlatfrom()
